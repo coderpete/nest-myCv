@@ -1,0 +1,52 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+//  provider = "postgresql"
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Account {
+  id            String  @id @default(uuid())
+  email         String  @unique
+  passwordHash  String  @map("password_hash")
+
+  @@map("account")
+}
+
+model Resume {
+  id            String  @id @default(uuid())
+  accountId     String  @map("account_id")
+  jobPostingId  String? @map("job_posting_id")
+  url           String
+
+  @@map("resume")
+}
+
+model JobPosting {
+  id          String  @id @default(uuid())
+  employerId  String  @map("employer_id")
+  url         String
+
+  @@map("job_posting")
+}
+
+model Employer {
+  id            String  @id @default(uuid())
+  name          String
+  websiteUrl    String? @map("website_url")
+  aboutUrl      String? @map("about_url")
+  contactUrl    String? @map("contact_url")
+  careersUrl    String? @map("careers_url")
+  glassDoorUrl  String? @map("glass_door_url")
+
+  @@map("employer")
+}
